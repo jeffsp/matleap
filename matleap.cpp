@@ -38,9 +38,12 @@ void mexFunction (int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
     mexPrintf ("Creating %d frame fields\n", frame_fields);
     plhs[0] = mxCreateStructMatrix (1, 1, frame_fields, frame_field_names);
     // fill the frame struct
-    mxSetFieldByNumber (plhs[0], 0, 0, mxCreateDoubleScalar (f.id));
-    mxSetFieldByNumber (plhs[0], 0, 1, mxCreateDoubleScalar (f.timestamp));
-        /*
+    //mxSetFieldByNumber (plhs[0], 0, 0, mxCreateDoubleScalar (f.id));
+    mxSetFieldByNumber (plhs[0], 0, 0, mxCreateDoubleScalar (100));
+    //mexPrintf ("setting timestamp\n");
+    //mxSetFieldByNumber (plhs[0], 0, 1, mxCreateDoubleScalar (f.timestamp));
+    mxSetFieldByNumber (plhs[0], 0, 1, mxCreateDoubleScalar (200));
+    /*
     if (f.pointables.count () > 0)
     {
         const char *pointable_field_names[] =
@@ -75,5 +78,5 @@ void mexFunction (int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
             mxSetFieldByNumber (p, i, 3, dir);
         }
     }
-        */
+    */
 }
