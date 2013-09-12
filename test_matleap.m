@@ -5,9 +5,10 @@
 % @date 2013-09-12
 
 function test_matleap
-    matleap('cb',1)
-end
-
-function cb(x)
-    disp 'callback'
+    matleap
+    f=matleap
+    f=matleap
+    f=matleap
+    f=matleap
+    f=matleap
 end
