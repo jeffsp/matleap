@@ -52,5 +52,4 @@ Controller device.
   the motion controller driver is not installed.**
 
 * Motion controller has slow framerate:  **The driver will go into standby
-  mode if no movement is detected for a long period of time.  This will
-  cause the framerate to slow down.**
+  mode if no movement is detected for a long period of time.**
