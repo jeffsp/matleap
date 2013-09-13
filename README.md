@@ -70,8 +70,8 @@ Controller device.
 
 ## Troubleshooting
 
-* Frames are returned with invalid looking frame data:  **This happens when
-  the motion controller driver is not installed.**
+* Frames are returned with invalid frame data:  **This happens when the
+  motion controller driver is not installed.**
 
 * Motion controller has slow framerate:  **The driver will go into standby
   mode if no movement is detected for a long period of time.**
