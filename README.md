@@ -1,4 +1,4 @@
-# Matleap: Leap Motion Controller Interface to MATLAB
+# Matleap: MATLAB Interface to the Leap Motion Controller
 
 This MATLAB mex program will allow you to get data from a Leap Motion
 Controller device.
