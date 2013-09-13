@@ -1,13 +1,13 @@
-## Matleap: Leap Motion Controller Interface to MATLAB
+# Matleap: Leap Motion Controller Interface to MATLAB
 
-This MATLAB mex program will allow you to get data from
-a Leap Motion Controller device.
+This MATLAB mex program will allow you to get data from a Leap Motion
+Controller device.
 
-# Building
+## Building
 
 * Install the Leap SDK
-* Create a symbolic link to the SDK called "LeapSDK", and
-  place it in the same directory as the mex source file, for example:
+* Create a symbolic link to the SDK called "LeapSDK", and place it in the
+  same directory as the mex source file, for example:
 
     $ ln -s ~/Software/Leap_Developer_Kit/LeapSDK/ ~/matleap/LeapSDK
 
@@ -15,11 +15,11 @@ a Leap Motion Controller device.
 
     >> build
 
-# Testing
+## Testing
 
     >> test_matleap
 
-# Examples
+## Examples
     >> matleap(0)
     ans =
          0     1
@@ -37,3 +37,12 @@ a Leap Motion Controller device.
     >> f.pointables(1).direction
     ans =
        0.2089    0.3257   -0.9221
+
+## Troubleshooting
+
+* Frames are returned with invalid looking frame data:  **This happens when
+  the motion controller driver is not installed.**
+
+* Motion controller has slow framerate:  **The driver will go into standby
+  mode if no movement is detected for a long period of time.  This will
+  cause the framerate to slow down.**
