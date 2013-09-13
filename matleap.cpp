@@ -44,7 +44,7 @@ int get_command (int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
         case 0:
         {
             // get version command requires 1 outputs
-            if (nlhs != 1)
+            if (nlhs != 0 && nlhs != 1)
                 mexErrMsgTxt ("Wrong number of outputs specified");
         }
         break;
@@ -54,7 +54,7 @@ int get_command (int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
             if (nrhs > 1)
                 mexErrMsgTxt ("Too many inputs specified");
             // frame grab command requires exactly one output
-            if (nlhs != 1)
+            if (nlhs != 0 && nlhs != 1)
                 mexErrMsgTxt ("Wrong number of outputs specified");
         }
         break;
