@@ -8,11 +8,8 @@ Controller device.
 * Install the Leap SDK
 * Create a symbolic link to the SDK called "LeapSDK", and place it in the
   same directory as the mex source file, for example:
-
     $ ln -s ~/Software/Leap_Developer_Kit/LeapSDK/ ~/matleap/LeapSDK
-
 * Build the mex file from within MATLAB
-
     >> build
 
 ## Testing
