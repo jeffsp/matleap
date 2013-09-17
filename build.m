@@ -10,15 +10,15 @@ if exist('LeapSDK')~=7
 end
 
 % determine where the Leap library is located
-if isunix || ispc
+if ismac
+    libdir_switch='-L./LeapSDK/lib';
+elseif isunix || ispc
     % check register size
     if findstr('64',mexext)
         libdir_switch='-L./LeapSDK/lib/x64';
     else
         libdir_switch='-L./LeapSDK/lib/x86';
     end
-elseif ismac
-    libdir_switch='-L./LeapSDK/lib';
 else
     error('Unknown operating system');
 end
