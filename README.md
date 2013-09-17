@@ -70,8 +70,22 @@ Controller device.
 
 ## Troubleshooting
 
+### General
+
 * Frames are returned with invalid frame data:  **This happens when the
   motion controller driver is not installed.**
 
 * Motion controller has slow framerate:  **The driver will go into standby
   mode if no movement is detected for a long period of time.**
+
+### OS/X
+
+* "libLeap.dylib can't load" error: The Leap dynamic link library must be
+  made available to the mex-file executable either by changing your path,
+  creating a symbolic link to the library, or by copying the library to the
+  same directory as the mex-file.  For example,
+
+```
+    $ cp '/Applications/Leap Motion.app/Contents/MacOS/libLeap.dylib' \
+        path_to_matleap
+```
