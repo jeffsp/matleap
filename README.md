@@ -80,12 +80,22 @@ Controller device.
 
 ### OS/X
 
-* "libLeap.dylib can't load" error: The Leap dynamic link library must be
-  made available to the mex-file executable either by changing your path,
+* "libLeap.dylib can't load": **The Leap dynamic link library must be made
+  available to the mex-file executable either by changing your path,
   creating a symbolic link to the library, or by copying the library to the
-  same directory as the mex-file.  For example,
+  same directory as the mex-file.**  For example:
 
 ```
     $ cp '/Applications/Leap Motion.app/Contents/MacOS/libLeap.dylib' \
         path_to_matleap
+```
+
+### Linux
+
+* "Invalid MEX-file ... libLeap.so: cannot open shared object file: No such
+  file or directory":  **The leap shared library is must be made to the
+  mex-file executable.**  For example:
+
+```
+    # ln -s /usr/lib/Leap/libLeap.so /usr/lib/libLeap.so
 ```
