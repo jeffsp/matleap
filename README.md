@@ -93,7 +93,7 @@ Controller device.
 ### Linux
 
 * "Invalid MEX-file ... libLeap.so: cannot open shared object file: No such
-  file or directory":  **The leap shared library is must be made to the
+  file or directory":  **The leap shared library must be made to the
   mex-file executable.**  For example:
 
 ```
