@@ -86,8 +86,7 @@ Controller device.
   same directory as the mex-file.**  For example:
 
 ```
-    $ cp '/Applications/Leap Motion.app/Contents/MacOS/libLeap.dylib' \
-        path_to_matleap
+    $ cp '/Applications/Leap Motion.app/Contents/MacOS/libLeap.dylib' path_to_matleap
 ```
 
 ### Linux
@@ -97,5 +96,5 @@ Controller device.
   mex-file executable.**  For example:
 
 ```
-    # ln -s /usr/lib/Leap/libLeap.so /usr/lib/libLeap.so
+    # ln -s /usr/lib/Leap/libLeap.so /usr/lib/
 ```
