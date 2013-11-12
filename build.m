@@ -6,7 +6,7 @@
 
 % check for sdk
 if exist('LeapSDK')~=7
-    error('The "LeapSDK" folder cannot be found.  A link with this name should point to the directory that continas the SDK.');
+    error('The "LeapSDK" folder cannot be found.  A link with this name should point to the directory that contains the SDK.');
 end
 
 % determine where the Leap library is located
