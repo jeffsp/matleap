@@ -6,8 +6,24 @@
 
 #include "matleap.h"
 
-// Global instance
-matleap::frame_grabber fg;
+// Under Windows, a Leap::Controller must be allocated after the MEX
+// startup code has completed.  Also, a Leap::Controller must be
+// deleted in the function specified by mexAtExit after all global
+// destructors are called.  If the Leap::Controller is not allocated
+// and freed in this way, the MEX function will crash and cause MATLAB
+// to hang or close abruptly.  Linux and OS/X don't have these
+// constraints, and you can just create a global Leap::Controller
+// instance.
+
+// Global instance pointer
+matleap::frame_grabber *fg = 0;
+
+// Exit function
+void matleap_exit ()
+{
+    delete fg;
+    fg = 0;
+}
 
 /// @brief process interface arguments
 ///
@@ -85,7 +101,7 @@ mxArray *create_and_fill (const Leap::Vector &v)
 void get_frame (int nlhs, mxArray *plhs[])
 {
     // get the frame
-    const matleap::frame &f = fg.get_frame ();
+    const matleap::frame &f = fg->get_frame ();
     // create matlab frame struct
     const char *frame_field_names[] =
     {
@@ -130,11 +146,18 @@ void get_frame (int nlhs, mxArray *plhs[])
 
 void mexFunction (int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 {
+    if (!fg)
+    {
+        fg = new matleap::frame_grabber;
+        if (fg == 0)
+            mexErrMsgTxt ("Cannot allocate a frame grabber");
+        mexAtExit (matleap_exit);
+    }
     switch (get_command (nlhs, plhs, nrhs, prhs))
     {
         // turn on debug
         case -1:
-        fg.set_debug (true);
+        fg->set_debug (true);
         return;
         // get version
         case 0:
