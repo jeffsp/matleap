@@ -27,10 +27,10 @@ Controller device.
 
 ## Examples
 ```
-    >> matleap(0)
+    >> matleap_version
     ans =
-         0     1
-    >> f=matleap(1)
+         0     4
+    >> f=matleap_frame
     f =
                   id: 263725
              timestamp: 8.1430e+09
@@ -46,7 +46,7 @@ Controller device.
        0.2089    0.3257   -0.9221
 
     >> test_matleap
-    matleap version 0.1
+    matleap version 0.4
     frame id 309984
     frame timestamp 8767122812
     frame pointables 5
