@@ -8,9 +8,9 @@ function test_matleap
     % remove matleap mex-file from memory
     clear functions
     % set debug on
-    %matleap(-1)
+    %matleap_debug
     % show version
-    [version]=matleap(0);
+    [version]=matleap_version;
     fprintf('matleap version %d.%d\n',version(1),version(2));
     % pause to let the hardware wake up
     sleep(1)
@@ -20,7 +20,7 @@ function test_matleap
     tic
     while(toc<1)
         % get a frame
-        f=matleap(1);
+        f=matleap_frame;
         % only count it if it has a different id
         if f.id~=frame_id
             frame_id=f.id;
