@@ -89,10 +89,18 @@ Controller device.
     $ cp '/Applications/Leap Motion.app/Contents/MacOS/libLeap.dylib' path_to_matleap
 ```
 
+### Windows
+
+* "Invalid MEX-file '...\matleap.mexw64/32': The specified module could not
+  be found.": **Leap.dll must be made available to the mex-file executeable,
+  either by adding it to your path or copying it to the same directory as
+  the mex-file.  The leap DLL is located in the LeapSDK\lib\x86 directory on
+  32 bit systems and in the LeapSDK\lib\x64 directory on 64 bit systems.**
+
 ### Linux
 
 * "Invalid MEX-file ... libLeap.so: cannot open shared object file: No such
-  file or directory":  **The leap shared library must be made to the
+  file or directory":  **The leap shared library must be made available to the
   mex-file executable.**  For example:
 
 ```
