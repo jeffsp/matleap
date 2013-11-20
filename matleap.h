@@ -50,6 +50,8 @@ class frame_grabber
     /// @param flag turn it on/off
     void set_debug (bool flag)
     {
+        if (flag == debug)
+            return;
         if (flag)
             mexPrintf ("Setting debug on\n");
         debug = flag;
