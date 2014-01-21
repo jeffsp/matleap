@@ -7,9 +7,9 @@ Controller device.
 
 * Install the Leap SDK
 * Give the matleap build module access the Leap SDK:
-..* If you are running **Windows**, copy the LeapSDK directory to the
+  * If you are running **Windows**, copy the LeapSDK directory to the
   directory that contains the matleap code.
-..* If you are running **OS/X** or **Linux**, you can either copy the
+  * If you are running **OS/X** or **Linux**, you can either copy the
   directory, or better still, create a symbolic link to the LeapSDK
   directory and place it in the same directory as the matleap code,
   for example:
