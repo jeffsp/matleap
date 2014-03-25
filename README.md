@@ -4,10 +4,10 @@ This MATLAB mex program will allow you to get data from a Leap Motion
 Controller device.
 
 In order to build this mex program, you need to have a C++ compiler
-installed, and you need to setup the Matlab for building mex-files.
+installed, and you need to setup Matlab for building mex-files.
 
 For more information on setting up Matlab for building mex-files, see
-the Matlab documentation.
+[the Matlab documentation](http://www.mathworks.com/help/matlab/ref/mex.html).
 
 ## Building
 
