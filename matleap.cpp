@@ -161,7 +161,7 @@ void mexFunction (int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
         return;
         // get version
         case 0:
-        plhs[0] = mxCreateNumericMatrix (1, 2, mxDOUBLE_CLASS, 0);
+        plhs[0] = mxCreateNumericMatrix (1, 2, mxDOUBLE_CLASS, mxREAL);
         *(mxGetPr (plhs[0]) + 0) = MAJOR_REVISION;
         *(mxGetPr (plhs[0]) + 1) = MINOR_REVISION;
         return;
