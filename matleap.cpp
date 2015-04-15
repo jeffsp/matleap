@@ -115,7 +115,7 @@ void get_frame (int nlhs, mxArray *plhs[])
     mxSetFieldByNumber (plhs[0], 0, 1, mxCreateDoubleScalar (f.timestamp));
     // create the pointables structs
 
-	if (f.pointables.count () > 0)
+    if (f.pointables.count () > 0)
     {
         const char *pointable_field_names[] =
         {
@@ -123,14 +123,14 @@ void get_frame (int nlhs, mxArray *plhs[])
             "position",
             "velocity",
             "direction",
-			"is_extended",
-			"is_finger",
-			"is_tool",
-			"is_valid",
-			"length",
-			"width",
-			"touch_distance",
-			"time_visible"
+            "is_extended",
+            "is_finger",
+            "is_tool",
+            "is_valid",
+            "length",
+            "width",
+            "touch_distance",
+            "time_visible"
         };
         int pointable_fields = sizeof (pointable_field_names) / sizeof (*pointable_field_names);
         mxArray *p = mxCreateStructMatrix (1, f.pointables.count (), pointable_fields, pointable_field_names);
@@ -147,18 +147,18 @@ void get_frame (int nlhs, mxArray *plhs[])
             mxArray *vel = create_and_fill (f.pointables[i].tipVelocity ());
             mxArray *dir = create_and_fill (f.pointables[i].direction ());
 			
-			// set them in the struct
-			mxSetFieldByNumber (p, i, 1, pos);
+            // set them in the struct
+            mxSetFieldByNumber (p, i, 1, pos);
             mxSetFieldByNumber (p, i, 2, vel);
             mxSetFieldByNumber (p, i, 3, dir);
             mxSetFieldByNumber (p, i, 4, mxCreateDoubleScalar (f.pointables[i].isExtended ()));
-			mxSetFieldByNumber (p, i, 5, mxCreateDoubleScalar (f.pointables[i].isFinger ()));
-			mxSetFieldByNumber (p, i, 6, mxCreateDoubleScalar (f.pointables[i].isTool ()));
-			mxSetFieldByNumber (p, i, 7, mxCreateDoubleScalar (f.pointables[i].isValid ()));
-			mxSetFieldByNumber (p, i, 8, mxCreateDoubleScalar (f.pointables[i].length ()));
-			mxSetFieldByNumber (p, i, 9, mxCreateDoubleScalar (f.pointables[i].width ()));
-			mxSetFieldByNumber (p, i, 10, mxCreateDoubleScalar (f.pointables[i].touchDistance ()));
-			mxSetFieldByNumber (p, i, 11, mxCreateDoubleScalar (f.pointables[i].timeVisible ()));
+            mxSetFieldByNumber (p, i, 5, mxCreateDoubleScalar (f.pointables[i].isFinger ()));
+            mxSetFieldByNumber (p, i, 6, mxCreateDoubleScalar (f.pointables[i].isTool ()));
+            mxSetFieldByNumber (p, i, 7, mxCreateDoubleScalar (f.pointables[i].isValid ()));
+            mxSetFieldByNumber (p, i, 8, mxCreateDoubleScalar (f.pointables[i].length ()));
+            mxSetFieldByNumber (p, i, 9, mxCreateDoubleScalar (f.pointables[i].width ()));
+            mxSetFieldByNumber (p, i, 10, mxCreateDoubleScalar (f.pointables[i].touchDistance ()));
+            mxSetFieldByNumber (p, i, 11, mxCreateDoubleScalar (f.pointables[i].timeVisible ()));
         }
 		
     }
