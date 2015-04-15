@@ -8,7 +8,7 @@
 #define MATLEAP_H
 
 #define MAJOR_REVISION 0
-#define MINOR_REVISION 5
+#define MINOR_REVISION 6
 
 #include "Leap.h"
 #include "mex.h"
