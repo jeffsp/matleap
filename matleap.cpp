@@ -93,7 +93,6 @@ mxArray *create_and_fill (const Leap::Vector &v)
     *(mxGetPr (p) + 2) = v.z;
     return p;
 }
-
 /// @brief get a frame from the leap controller
 ///
 /// @param nlhs matlab mex output interface
@@ -115,6 +114,7 @@ void get_frame (int nlhs, mxArray *plhs[])
     mxSetFieldByNumber (plhs[0], 0, 0, mxCreateDoubleScalar (f.id));
     mxSetFieldByNumber (plhs[0], 0, 1, mxCreateDoubleScalar (f.timestamp));
     // create the pointables structs
+
     if (f.pointables.count () > 0)
     {
         const char *pointable_field_names[] =
@@ -122,12 +122,22 @@ void get_frame (int nlhs, mxArray *plhs[])
             "id",
             "position",
             "velocity",
-            "direction"
+            "direction",
+            "is_extended",
+            "is_finger",
+            "is_tool",
+            "is_valid",
+            "length",
+            "width",
+            "touch_distance",
+            "time_visible"
         };
         int pointable_fields = sizeof (pointable_field_names) / sizeof (*pointable_field_names);
         mxArray *p = mxCreateStructMatrix (1, f.pointables.count (), pointable_fields, pointable_field_names);
-        mxSetFieldByNumber (plhs[0], 0, 2, p);
+        mxSetFieldByNumber (plhs[0], 0, 2, p); 
         // fill the pointables structs
+		
+		
         for (size_t i = 0; i < f.pointables.count (); ++i)
         {
             // set the id
@@ -136,12 +146,23 @@ void get_frame (int nlhs, mxArray *plhs[])
             mxArray *pos = create_and_fill (f.pointables[i].tipPosition ());
             mxArray *vel = create_and_fill (f.pointables[i].tipVelocity ());
             mxArray *dir = create_and_fill (f.pointables[i].direction ());
+			
             // set them in the struct
             mxSetFieldByNumber (p, i, 1, pos);
             mxSetFieldByNumber (p, i, 2, vel);
             mxSetFieldByNumber (p, i, 3, dir);
+            mxSetFieldByNumber (p, i, 4, mxCreateDoubleScalar (f.pointables[i].isExtended ()));
+            mxSetFieldByNumber (p, i, 5, mxCreateDoubleScalar (f.pointables[i].isFinger ()));
+            mxSetFieldByNumber (p, i, 6, mxCreateDoubleScalar (f.pointables[i].isTool ()));
+            mxSetFieldByNumber (p, i, 7, mxCreateDoubleScalar (f.pointables[i].isValid ()));
+            mxSetFieldByNumber (p, i, 8, mxCreateDoubleScalar (f.pointables[i].length ()));
+            mxSetFieldByNumber (p, i, 9, mxCreateDoubleScalar (f.pointables[i].width ()));
+            mxSetFieldByNumber (p, i, 10, mxCreateDoubleScalar (f.pointables[i].touchDistance ()));
+            mxSetFieldByNumber (p, i, 11, mxCreateDoubleScalar (f.pointables[i].timeVisible ()));
         }
+		
     }
+	
 }
 
 void mexFunction (int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
