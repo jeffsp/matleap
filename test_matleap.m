@@ -18,7 +18,7 @@ function test_matleap
     frame_id=-1;
     frames=0;
     tic
-    while(toc<1)
+    while(toc<10)
         % get a frame
         f=matleap_frame;
         % only count it if it has a different id
@@ -47,6 +47,7 @@ function print(f)
     fprintf('frame id %d\n',f.id);
     fprintf('frame timestamp %d\n',f.timestamp);
     fprintf('frame pointables %d\n',length(f.pointables));
+    fprintf('frame hands %d\n',length(f.hands));
     for i=1:length(f.pointables)
         fprintf('pointable %d\n',i);
         fprintf('\tid ');
@@ -60,6 +61,25 @@ function print(f)
         fprintf('\n');
         fprintf('\tdirection ');
         fprintf(' %f',f.pointables(i).direction);
+        fprintf('\n');
+    end
+    
+    for i=1:length(f.hands)
+        fprintf('hand %d\n',i);
+        fprintf('\tpalm position ');
+        fprintf(' %f',f.hands(i).palm_position); 
+        fprintf('\n');
+        
+        fprintf('\tsphere radius ');
+        fprintf(' %f',f.hands(i).sphere_radius); 
+        fprintf('\n');
+        
+        fprintf('\tis right ');
+        fprintf(' %f',f.hands(i).is_right); 
+        fprintf('\n');
+        
+        fprintf('\tis left ');
+        fprintf(' %f',f.hands(i).is_left); 
         fprintf('\n');
     end
 end

@@ -8,7 +8,7 @@
 #define MATLEAP_H
 
 #define MAJOR_REVISION 0
-#define MINOR_REVISION 6
+#define MINOR_REVISION 7
 
 #include "Leap.h"
 #include "mex.h"
@@ -22,6 +22,7 @@ struct frame
     int64_t id;
     int64_t timestamp;
     Leap::PointableList pointables;
+    Leap::HandList hands;
 };
 
 /// @brief leap frame grabber interface
@@ -67,6 +68,7 @@ class frame_grabber
             mexPrintf ("Got frame with id %d\n", current_frame.id);
         current_frame.timestamp = f.timestamp ();
         current_frame.pointables = f.pointables ();
+        current_frame.hands = f.hands ();
         return current_frame;
     }
 };
