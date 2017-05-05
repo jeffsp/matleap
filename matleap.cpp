@@ -222,6 +222,10 @@ void get_frame (int nlhs, mxArray *plhs[])
             
             "time_visible", // 16
             "wrist_position" // 17
+            
+            "arm_elbowPosition" // 18
+            "arm_wristPosition" // 19
+            "arm_direction" // 20
         };
         
         
@@ -263,6 +267,13 @@ void get_frame (int nlhs, mxArray *plhs[])
             mxSetFieldByNumber (p, i, 16, mxCreateDoubleScalar (f.hands[i].timeVisible ()));
             
             mxSetFieldByNumber (p, i, 17, create_and_fill (f.hands[i].wristPosition ()));
+            
+            Leap::Arm arm = f.hands[i].arm;
+            
+            mxSetFieldByNumber (p, i, 18, create_and_fill (arm.elbowPosition ()));
+            mxSetFieldByNumber (p, i, 19, create_and_fill (arm.wristPosition ()));
+            mxSetFieldByNumber (p, i, 20, create_and_fill (arm.direction ()));
+            
         } // re: for f.hands.count()
     } // re: if f.hands.count() > 0
 }
