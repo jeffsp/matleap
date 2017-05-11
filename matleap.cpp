@@ -17,6 +17,7 @@
 
 // Global instance pointer
 matleap::frame_grabber *fg = 0;
+int version = 3; // 1: orig, 2: with arm info, 3: with more hand info
 
 // Exit function
 void matleap_exit ()
@@ -134,7 +135,8 @@ void get_frame (int nlhs, mxArray *plhs[])
         "id",
         "timestamp",
         "pointables",
-        "hands"
+        "hands",
+        "version"
     };
     int frame_fields = sizeof (frame_field_names) / sizeof (*frame_field_names);
     plhs[0] = mxCreateStructMatrix (1, 1, frame_fields, frame_field_names);
@@ -221,11 +223,13 @@ void get_frame (int nlhs, mxArray *plhs[])
             "stabilized_palm_position", // 15
             
             "time_visible", // 16
-            "wrist_position" // 17
+            "wrist_position", // 17
             
-            "arm_elbowPosition" // 18
-            "arm_wristPosition" // 19
-            "arm_direction" // 20
+            "arm_elbowPosition", // 18
+            "arm_wristPosition", // 19
+			"arm_direction", // 20
+
+			"fingers" // 21
         };
         
         
@@ -234,8 +238,8 @@ void get_frame (int nlhs, mxArray *plhs[])
         mxSetFieldByNumber (plhs[0], 0, 3, p);  
         // 3 because hands is the third (fourth) field name in 
         // the overall struct we are creating.
-        
-        for (size_t i = 0; i < f.hands.count (); ++i)
+		
+		for (int i = 0; i < f.hands.count(); ++i)
         {
             // one by one, get the fields for the hand
             mxSetFieldByNumber (p, i, 0, mxCreateDoubleScalar (f.hands[i].id ()));
@@ -267,15 +271,74 @@ void get_frame (int nlhs, mxArray *plhs[])
             mxSetFieldByNumber (p, i, 16, mxCreateDoubleScalar (f.hands[i].timeVisible ()));
             
             mxSetFieldByNumber (p, i, 17, create_and_fill (f.hands[i].wristPosition ()));
-            
-            Leap::Arm arm = f.hands[i].arm;
-            
+			
+			// get arm position
+			Leap::Arm arm = f.hands[i].arm();
             mxSetFieldByNumber (p, i, 18, create_and_fill (arm.elbowPosition ()));
             mxSetFieldByNumber (p, i, 19, create_and_fill (arm.wristPosition ()));
-            mxSetFieldByNumber (p, i, 20, create_and_fill (arm.direction ()));
+			mxSetFieldByNumber (p, i, 20, create_and_fill (arm.direction ()));
+
+			// get bones for all fingers
+            const char *finger_field_names[] =
+            {
+                "finger_type", // 0
+                "bones" // 1
+            };
+            int finger_fields = sizeof (finger_field_names) / sizeof (*finger_field_names);
+			Leap::FingerList fingers = f.hands[i].fingers();
+            mxArray *f = mxCreateStructMatrix (1, 5, finger_fields, finger_field_names);
+            mxSetFieldByNumber (p, 0, 21, f);
+            
+            int finger_index = 0;
+            for (Leap::FingerList::const_iterator fl = fingers.begin(); fl != fingers.end(); fl++) {
+                
+                mxSetFieldByNumber(f, 0, finger_index, mxCreateDoubleScalar((*fl).type())); // finger_type
+                
+                const char *bone_field_names[] =
+                {
+                    "basis",    // 0
+                    "center",   // 1
+                    "direction",// 2
+
+                    "is_valid", // 3
+
+                    "length",   // 4
+                    "width",    // 5
+                    "nextJoint",// 6
+                    "prevJoint",// 7
+
+                    "type"      // 8
+                };
+                int bone_fields = sizeof (bone_field_names) / sizeof (*bone_field_names);
+                mxArray *bones = mxCreateStructMatrix(1, 4, bone_fields, bone_field_names);
+                mxSetFieldByNumber(f, 0, finger_index, bones);
+                
+				Leap::Bone bone;
+				Leap::Bone::Type boneType;
+				for (int bi = 0; bi < 4; bi++)
+				{
+					// WATCH OUT: bones can be invalid(?)
+					boneType = static_cast<Leap::Bone::Type>(bi);
+					bone = (*fl).bone(boneType);
+                    
+                    mxSetFieldByNumber(bones,bi,0,create_and_fill(bone.basis())); // 0
+                    mxSetFieldByNumber(bones,bi,1,create_and_fill(bone.center())); // 1
+                    mxSetFieldByNumber(bones,bi,2,create_and_fill(bone.direction())); // 2
+                    mxSetFieldByNumber(bones,bi,3,mxCreateDoubleScalar(bone.isValid()));
+                    mxSetFieldByNumber(bones,bi,4,mxCreateDoubleScalar(bone.length()));
+                    mxSetFieldByNumber(bones,bi,5,mxCreateDoubleScalar(bone.width()));
+                    mxSetFieldByNumber(bones,bi,5,create_and_fill(bone.nextJoint()));
+                    mxSetFieldByNumber(bones,bi,5,create_and_fill(bone.prevJoint()));
+                    mxSetFieldByNumber(bones,bi,6,mxCreateDoubleScalar(boneType));
+
+				}
+                finger_index = finger_index + 1;
+			}
             
         } // re: for f.hands.count()
     } // re: if f.hands.count() > 0
+    
+    mxSetFieldByNumber (plhs[0], 0, 4, mxCreateDoubleScalar (version));
 }
 
 void mexFunction (int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
@@ -291,20 +354,20 @@ void mexFunction (int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
     {
         // turn on debug
         case -1:
-        fg->set_debug (true);
-        return;
-        // get version
+            fg->set_debug (true);
+            return;
+            // get version
         case 0:
-        plhs[0] = mxCreateNumericMatrix (1, 2, mxDOUBLE_CLASS, mxREAL);
-        *(mxGetPr (plhs[0]) + 0) = MAJOR_REVISION;
-        *(mxGetPr (plhs[0]) + 1) = MINOR_REVISION;
-        return;
-        // get frame
+            plhs[0] = mxCreateNumericMatrix (1, 2, mxDOUBLE_CLASS, mxREAL);
+            *(mxGetPr (plhs[0]) + 0) = MAJOR_REVISION;
+            *(mxGetPr (plhs[0]) + 1) = MINOR_REVISION;
+            return;
+            // get frame
         case 1:
-        get_frame (nlhs, plhs);
-        return;
+            get_frame (nlhs, plhs);
+            return;
         default:
-        // this is a logic error
-        mexErrMsgTxt ("unknown error: please contact developer");
+            // this is a logic error
+            mexErrMsgTxt ("unknown error: please contact developer");
     }
 }
