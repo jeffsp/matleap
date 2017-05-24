@@ -103,19 +103,19 @@ mxArray *create_and_fill (const Leap::Vector &v)
 mxArray *create_and_fill (const Leap::Matrix &m)
 {
     mxArray *p = mxCreateNumericMatrix (3, 3, mxDOUBLE_CLASS, mxREAL);
-
+    
     const Leap::Vector& x = m.xBasis;
     const Leap::Vector& y = m.yBasis;
     const Leap::Vector& z = m.zBasis;
-
+    
     *(mxGetPr (p) + 0) = x.x;
     *(mxGetPr (p) + 1) = x.y;
     *(mxGetPr (p) + 2) = x.z;
-
+    
     *(mxGetPr (p) + 3) = y.x;
     *(mxGetPr (p) + 4) = y.y;
     *(mxGetPr (p) + 5) = y.z;
-
+    
     *(mxGetPr (p) + 6) = z.x;
     *(mxGetPr (p) + 7) = z.y;
     *(mxGetPr (p) + 8) = z.z;
@@ -164,9 +164,10 @@ void get_frame (int nlhs, mxArray *plhs[])
         };
         int pointable_fields = sizeof (pointable_field_names) / sizeof (*pointable_field_names);
         mxArray *p = mxCreateStructMatrix (1, f.pointables.count (), pointable_fields, pointable_field_names);
-        mxSetFieldByNumber (plhs[0], 0, 2, p);
-
+        mxSetFieldByNumber (plhs[0], 0, 2, p); 
         // fill the pointables structs
+		
+		
         for (size_t i = 0; i < f.pointables.count (); ++i)
         {
             // set the id
@@ -175,7 +176,7 @@ void get_frame (int nlhs, mxArray *plhs[])
             mxArray *pos = create_and_fill (f.pointables[i].tipPosition ());
             mxArray *vel = create_and_fill (f.pointables[i].tipVelocity ());
             mxArray *dir = create_and_fill (f.pointables[i].direction ());
-
+			
             // set them in the struct
             mxSetFieldByNumber (p, i, 1, pos);
             mxSetFieldByNumber (p, i, 2, vel);
@@ -189,9 +190,10 @@ void get_frame (int nlhs, mxArray *plhs[])
             mxSetFieldByNumber (p, i, 10, mxCreateDoubleScalar (f.pointables[i].touchDistance ()));
             mxSetFieldByNumber (p, i, 11, mxCreateDoubleScalar (f.pointables[i].timeVisible ()));
         }
-
+		
     }
-
+    
+    
     if (f.hands.count () > 0)
     {
         const char *hand_field_names[] =
@@ -201,83 +203,95 @@ void get_frame (int nlhs, mxArray *plhs[])
             "basis", // 1
             "confidence", // 2
             "direction", // 3
-
+            
             "grab_strength", // 4
-
+            
             "is_left", // 5
             "is_right", // 6
             "is_valid", // 7
-
+            
             "palm_normal", // 8
             "palm_position", // 9
             "palm_velocity", // 10
             "palm_width", // 11
-
+            
             "pinch_strength", // 12
 
             "sphere_center", // 13
             "sphere_radius", // 14
-
+            
             "stabilized_palm_position", // 15
-
+            
             "time_visible", // 16
             "wrist_position", // 17
-
+            
             "arm_elbowPosition", // 18
             "arm_wristPosition", // 19
-            "arm_direction", // 20
+			"arm_direction", // 20
 
-            "fingers" // 21
+			"fingers" // 21
         };
-
+        
+        
         int hand_fields = sizeof (hand_field_names) / sizeof (*hand_field_names);
         mxArray *p = mxCreateStructMatrix (1, f.hands.count (), hand_fields, hand_field_names);
-        mxSetFieldByNumber (plhs[0], 0, 3, p);
-        // 3 because hands is the third (fourth) field name in
+        mxSetFieldByNumber (plhs[0], 0, 3, p);  
+        // 3 because hands is the third (fourth) field name in 
         // the overall struct we are creating.
-
-        for (int i = 0; i < f.hands.count(); ++i)
+		
+		for (int i = 0; i < f.hands.count(); ++i)
         {
             // one by one, get the fields for the hand
             mxSetFieldByNumber (p, i, 0, mxCreateDoubleScalar (f.hands[i].id ()));
+            
             mxSetFieldByNumber (p, i, 1, create_and_fill (f.hands[i].basis ()));
             mxSetFieldByNumber (p, i, 2, mxCreateDoubleScalar (f.hands[i].confidence ()));
+            
             mxSetFieldByNumber (p, i, 3, create_and_fill (f.hands[i].direction ()));
+            
             mxSetFieldByNumber (p, i, 4, mxCreateDoubleScalar (f.hands[i].grabStrength ()));
+            
             mxSetFieldByNumber (p, i, 5, mxCreateDoubleScalar (f.hands[i].isLeft ()));
             mxSetFieldByNumber (p, i, 6, mxCreateDoubleScalar (f.hands[i].isRight ()));
+            
             mxSetFieldByNumber (p, i, 7, mxCreateDoubleScalar (f.hands[i].isValid ()));
+            
             mxSetFieldByNumber (p, i, 8, create_and_fill (f.hands[i].palmNormal ()));
             mxSetFieldByNumber (p, i, 9, create_and_fill (f.hands[i].palmPosition ()));
             mxSetFieldByNumber (p, i, 10, create_and_fill (f.hands[i].palmVelocity ()));
             mxSetFieldByNumber (p, i, 11, mxCreateDoubleScalar (f.hands[i].palmWidth ()));
+            
             mxSetFieldByNumber (p, i, 12, mxCreateDoubleScalar (f.hands[i].pinchStrength ()));
+            
             mxSetFieldByNumber (p, i, 13, create_and_fill (f.hands[i].sphereCenter ()));
             mxSetFieldByNumber (p, i, 14, mxCreateDoubleScalar (f.hands[i].sphereRadius ()));
+            
             mxSetFieldByNumber (p, i, 15, create_and_fill (f.hands[i].stabilizedPalmPosition ()));
+            
             mxSetFieldByNumber (p, i, 16, mxCreateDoubleScalar (f.hands[i].timeVisible ()));
+            
             mxSetFieldByNumber (p, i, 17, create_and_fill (f.hands[i].wristPosition ()));
-            // get arm position
-            Leap::Arm arm = f.hands[i].arm();
+			
+			// get arm position
+			Leap::Arm arm = f.hands[i].arm();
             mxSetFieldByNumber (p, i, 18, create_and_fill (arm.elbowPosition ()));
             mxSetFieldByNumber (p, i, 19, create_and_fill (arm.wristPosition ()));
-            mxSetFieldByNumber (p, i, 20, create_and_fill (arm.direction ()));
+			mxSetFieldByNumber (p, i, 20, create_and_fill (arm.direction ()));
 
-            // get bones for all fingers
+			// get bones for all fingers
             const char *finger_field_names[] =
             {
-                "finger_type", // 0
-                "bones" // 1
+                "bones" // 0
+                //"finger_type" // 1 disabled - bug
             };
             int finger_fields = sizeof (finger_field_names) / sizeof (*finger_field_names);
-            Leap::FingerList fingers = f.hands[i].fingers();
+			Leap::FingerList fingers = f.hands[i].fingers();
             mxArray *f = mxCreateStructMatrix (1, 5, finger_fields, finger_field_names);
             mxSetFieldByNumber (p, 0, 21, f);
-
+            
             int finger_index = 0;
-            for (Leap::FingerList::const_iterator fl = fingers.begin(); fl != fingers.end(); fl++)
-            {
-                mxSetFieldByNumber(f, 0, finger_index, mxCreateDoubleScalar((*fl).type())); // finger_type
+            for (Leap::FingerList::const_iterator fl = fingers.begin(); fl != fingers.end(); fl++) {
+                
                 const char *bone_field_names[] =
                 {
                     "basis",    // 0
@@ -296,31 +310,34 @@ void get_frame (int nlhs, mxArray *plhs[])
                 int bone_fields = sizeof (bone_field_names) / sizeof (*bone_field_names);
                 mxArray *bones = mxCreateStructMatrix(1, 4, bone_fields, bone_field_names);
                 mxSetFieldByNumber(f, 0, finger_index, bones);
-
-                Leap::Bone bone;
-                Leap::Bone::Type boneType;
-                for (int bi = 0; bi < 4; bi++)
-                {
-                    // WATCH OUT: bones can be invalid(?)
-                    boneType = static_cast<Leap::Bone::Type>(bi);
-                    bone = (*fl).bone(boneType);
-
+                
+				Leap::Bone bone;
+				Leap::Bone::Type boneType;
+				for (int bi = 0; bi < 4; bi++)
+				{
+					// WATCH OUT: bones can be invalid(?)
+					boneType = static_cast<Leap::Bone::Type>(bi);
+					bone = (*fl).bone(boneType);
+                    
                     mxSetFieldByNumber(bones,bi,0,create_and_fill(bone.basis())); // 0
                     mxSetFieldByNumber(bones,bi,1,create_and_fill(bone.center())); // 1
                     mxSetFieldByNumber(bones,bi,2,create_and_fill(bone.direction())); // 2
                     mxSetFieldByNumber(bones,bi,3,mxCreateDoubleScalar(bone.isValid()));
                     mxSetFieldByNumber(bones,bi,4,mxCreateDoubleScalar(bone.length()));
                     mxSetFieldByNumber(bones,bi,5,mxCreateDoubleScalar(bone.width()));
-                    mxSetFieldByNumber(bones,bi,5,create_and_fill(bone.nextJoint()));
-                    mxSetFieldByNumber(bones,bi,5,create_and_fill(bone.prevJoint()));
-                    mxSetFieldByNumber(bones,bi,6,mxCreateDoubleScalar(boneType));
+                    mxSetFieldByNumber(bones,bi,6,create_and_fill(bone.nextJoint()));
+                    mxSetFieldByNumber(bones,bi,7,create_and_fill(bone.prevJoint()));
+                    mxSetFieldByNumber(bones,bi,8,mxCreateDoubleScalar(boneType));
 
-                }
+				}
+                // disabled finger type: bug causes finger_type and bones to mix up.
+                // mxSetFieldByNumber(f, 1, finger_index, mxCreateDoubleScalar((*fl).type())); // finger_type
                 finger_index = finger_index + 1;
-            }
+			}
+            
         } // re: for f.hands.count()
     } // re: if f.hands.count() > 0
-
+    
     mxSetFieldByNumber (plhs[0], 0, 4, mxCreateDoubleScalar (version));
 }
 
