@@ -272,12 +272,12 @@ void get_frame (int nlhs, mxArray *plhs[])
             int finger_fields = sizeof (finger_field_names) / sizeof (*finger_field_names);
             Leap::FingerList fingers = f.hands[i].fingers();
             mxArray *f = mxCreateStructMatrix (1, 5, finger_fields, finger_field_names);
-            mxSetFieldByNumber (p, 0, 21, f);
+            mxSetFieldByNumber (p, i, 21, f);
 
             int finger_index = 0;
             for (Leap::FingerList::const_iterator fl = fingers.begin(); fl != fingers.end(); fl++)
             {
-                mxSetFieldByNumber(f, 0, finger_index, mxCreateDoubleScalar((*fl).type())); // finger_type
+                mxSetFieldByNumber(f, finger_index, 0, mxCreateDoubleScalar((*fl).type())); // finger_type
                 const char *bone_field_names[] =
                 {
                     "basis",    // 0
@@ -295,7 +295,7 @@ void get_frame (int nlhs, mxArray *plhs[])
                 };
                 int bone_fields = sizeof (bone_field_names) / sizeof (*bone_field_names);
                 mxArray *bones = mxCreateStructMatrix(1, 4, bone_fields, bone_field_names);
-                mxSetFieldByNumber(f, 0, finger_index, bones);
+                mxSetFieldByNumber(f, finger_index, 1, bones);
 
                 Leap::Bone bone;
                 Leap::Bone::Type boneType;
@@ -311,9 +311,9 @@ void get_frame (int nlhs, mxArray *plhs[])
                     mxSetFieldByNumber(bones,bi,3,mxCreateDoubleScalar(bone.isValid()));
                     mxSetFieldByNumber(bones,bi,4,mxCreateDoubleScalar(bone.length()));
                     mxSetFieldByNumber(bones,bi,5,mxCreateDoubleScalar(bone.width()));
-                    mxSetFieldByNumber(bones,bi,5,create_and_fill(bone.nextJoint()));
-                    mxSetFieldByNumber(bones,bi,5,create_and_fill(bone.prevJoint()));
-                    mxSetFieldByNumber(bones,bi,6,mxCreateDoubleScalar(boneType));
+                    mxSetFieldByNumber(bones,bi,6,create_and_fill(bone.nextJoint()));
+                    mxSetFieldByNumber(bones,bi,7,create_and_fill(bone.prevJoint()));
+                    mxSetFieldByNumber(bones,bi,8,mxCreateDoubleScalar(boneType));
 
                 }
                 finger_index = finger_index + 1;
